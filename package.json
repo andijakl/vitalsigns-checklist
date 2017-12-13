@@ -1,0 +1,24 @@
+{
+  "name": "vitalsigns-checklist",
+  "version": "1.0.0",
+  "description": "Automatically log a vital signs checklist. Uses natural language understanding from Microsoft LUIS / Language Understanding Intelligent Service. Based on a Node.JS app.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andijakl/vitalsigns-checklist.git"
+  },
+  "author": "Andreas Jakl",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andijakl/vitalsigns-checklist/issues"
+  },
+  "homepage": "https://github.com/andijakl/vitalsigns-checklist#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "request": "^2.83.0",
+    "socket.io": "^2.0.4"
+  }
+}
