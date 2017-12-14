@@ -1,13 +1,20 @@
 $(document).ready(function () {
     console.log("Document ready");
+    $('.errormsg').hide();
     var socket = io();
 
     $("#assessment_form").submit(function(e){
-        console.log("Form submitted");
+        // Hide previous error message in case it's still visible
+        $('.errormsg').hide();
+
+        // Retrieve text entered into text box
         var enteredText = $("#assessment_text").val();
-        console.log("Entered text: " + enteredText);
+        console.log("Form submitted - entered text: " + enteredText);
         
+        // Send the message to the server via socket.io
         socket.emit('assessment', enteredText);
+
+        // Clear the entered text from the text box
         $('#assessment_text').val('');
 
         // Do not reload page
@@ -22,5 +29,9 @@ $(document).ready(function () {
     });
     socket.on('Age', function(msg){
         $('.result_age').html(msg);
+    });
+    socket.on('Error', function(msg){
+        $('.errormsg').html(msg);
+        $('.errormsg').show();
     });
 });
