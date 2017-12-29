@@ -18,7 +18,11 @@
         crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
         crossorigin="anonymous"></script>
+
+    <!-- Socket.io client code. The file is served by our Node.js server because we installed the module -->
     <script src="/socket.io/socket.io.js"></script>
+
+    <!-- Our own logic -->
     <script src="language.js"></script>
 </head>
 
@@ -29,13 +33,11 @@
                 <h1>Vital Sign Checklist</h1>
                 <form id="assessment_form">
                     <div class="input-group">
-                        <input type="text" class="form-control" 
-                            id="assessment_text" placeholder="Your assessment in natural language">
+                        <input type="text" class="form-control" id="assessment_text" placeholder="Your assessment in natural language">
                         <span class="input-group-btn">
                             <button class="btn btn-primary" type="submit">Submit</button>
                         </span>
                     </div>
-                    <!-- /input-group -->
                 </form>
                 <div class="errormsg alert alert-warning hide" role="alert"></div>
             </div>
