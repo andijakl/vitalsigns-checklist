@@ -8,6 +8,7 @@ var querystring = require('querystring');
 const ENDPOINT = "https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/";
 const APPID = "";
 const APPKEY = "";
+const PORT = process.env.PORT || 3000;
 
 app.use(express.static('public'));
 
@@ -67,4 +68,4 @@ function sendToLuis(assessment, socketId) {
     );
 }
 
-http.listen(3000, () => console.log('Vital Signs Checklist server listening on port 3000!'));
+http.listen(PORT, () => console.log(`Vital Signs Checklist server listening on port ${PORT}!`));
