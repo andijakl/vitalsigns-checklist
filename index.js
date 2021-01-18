@@ -1,11 +1,11 @@
 const express = require('express');
 const app = express();
-var http = require('http').Server(app);
-var io = require('socket.io')(http, {
+const http = require('http').Server(app);
+const io = require('socket.io')(http, {
     perMessageDeflate: false
 });
 const fetch = require('node-fetch');
-var querystring = require('querystring');   // Part of Node.js
+const querystring = require('querystring');   // Part of Node.js
 
 const APPID = "";
 const APPKEY = "";
@@ -39,7 +39,7 @@ async function sendToLuis(assessment, socketId) {
         return;
     }
     // Send to LUIS
-    var queryParams = {
+    let queryParams = {
         "subscription-key": APPKEY,
         "verbose": true,    // We need verbose so that we can access the entity data in a generic way
         "show-all-intents": false,
@@ -47,7 +47,7 @@ async function sendToLuis(assessment, socketId) {
         "query": assessment
     }
 
-    var luisRequest =
+    let luisRequest =
         ENDPOINT +
         '?' + querystring.stringify(queryParams);
 

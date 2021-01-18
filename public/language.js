@@ -4,16 +4,16 @@ $(document).ready(function () {
     // Ensure the error message is hidden when the page is loaded
     $('.errormsg').hide();
     // Initialize the socket.io library
-    var socket = io();
+    const socket = io();
 
-    $("#assessment_form").submit(function(e){
+    $("#assessment_form").submit(function (e) {
         // Hide previous error message in case it's still visible
         $('.errormsg').hide();
 
         // Retrieve text entered into text box
-        var enteredText = $("#assessment_text").val();
+        let enteredText = $("#assessment_text").val();
         console.log("Form submitted - entered text: " + enteredText);
-        
+
         // Send the message to the server via socket.io
         socket.emit('assessment', enteredText);
 
@@ -23,20 +23,20 @@ $(document).ready(function () {
         // Do not reload page
         e.preventDefault();
     });
-    
-    socket.on('Temperature', function(msg){
+
+    socket.on('Temperature', function (msg) {
         // Temperature intent was recognized - update UI with new entity value
         $('.result_temperature').html(msg);
     });
-    socket.on('PupillaryResponse', function(msg){
+    socket.on('PupillaryResponse', function (msg) {
         // PupillaryResponse intent was recognized - update UI with new entity value
         $('.result_pupillaryresponse').html(msg);
     });
-    socket.on('Age', function(msg){
+    socket.on('Age', function (msg) {
         // Age intent was recognized - update UI with new entity value
         $('.result_age').html(msg);
     });
-    socket.on('Error', function(msg){
+    socket.on('Error', function (msg) {
         // Error message was received
         // Update UI with the error message and make sure the div is visible
         $('.errormsg').html(msg);

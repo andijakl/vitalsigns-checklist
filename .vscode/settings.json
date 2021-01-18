@@ -3,6 +3,6 @@
         "node_modules{,/**}",
         ".vscode{,/**}"
     ],
-    "appService.defaultWebAppToDeploy": "/subscriptions/99095899-e641-42ab-ba9f-fcf13403b1df/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/vitalsigns-checklist",
-    "appService.deploySubpath": "."
+    "appService.deploySubpath": ".",
+    "appService.defaultWebAppToDeploy": "/subscriptions/99095899-e641-42ab-ba9f-fcf13403b1df/resourceGroups/vitalsigns-dhc/providers/Microsoft.Web/sites/vitalsigns-dhc"
 }
