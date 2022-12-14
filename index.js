@@ -1,37 +1,43 @@
-const express = require('express');
+import express from 'express';
 const app = express();
-const http = require('http').Server(app);
-const io = require('socket.io')(http, {
+import { createServer } from "http";
+import { Server } from "socket.io";
+
+const httpServer = createServer(app);
+
+const io = new Server(httpServer, {
     perMessageDeflate: false
 });
-const fetch = require('node-fetch');
-const querystring = require('querystring');   // Part of Node.js
 
-const APPID = "";
-const APPKEY = "";
+import fetch from 'node-fetch';
 
-const ENDPOINT = `https://westus.api.cognitive.microsoft.com/luis/prediction/v3.0/apps/${APPID}/slots/production/predict`;
+// TODO: configure these values according to your deployment!
+const ENDPOINT_ID = "fhstp-language";
+const PROJECT_NAME = "PatientCheck";
+const APPKEY = "f759dd0473994ea1b3d9b7fddb07d707";
+const DEPLOYMENT_NAME = "vitalsigns-deployment";
 
+// YOu do not need to change the following settings
+const ENDPOINT = `https://${ENDPOINT_ID}.cognitiveservices.azure.com/language/:analyze-conversations?api-version=2022-10-01-preview`;
 const PORT = process.env.PORT || 3000;
 
 app.use(express.static('public'));
 
-// Note: if deployed on Azure, web sockets might fail if deployed to Linux free tier.
+// Note: if deployed on Azure, web sockets have some limitations on the Linux free tier.
 // See: https://docs.microsoft.com/en-us/azure/app-service/faq-app-service-linux#web-sockets
-// https://github.com/MicrosoftDocs/azure-docs/issues/49245
 // socket.io still finds a way to connect, so you get an error message in the browser console,
 // but it still works.
 
 io.on('connection', async (socket) => {
     socket.on('assessment', async (msg) => {
         console.log("Got assessment: " + msg);
-        await sendToLuis(msg, socket.id);
+        await sendToCognitiveService(msg, socket.id);
     });
 });
 
-async function sendToLuis(assessment, socketId) {
+async function sendToCognitiveService(assessment, socketId) {
     // Check if we have all the data we need
-    if (!ENDPOINT || !APPID || !APPKEY) {
+    if (!ENDPOINT_ID || !PROJECT_NAME || !APPKEY || !DEPLOYMENT_NAME) {
         io.to(socketId).emit('Error', 'Missing configuration on the server.');
         return;
     }
@@ -39,21 +45,31 @@ async function sendToLuis(assessment, socketId) {
         io.to(socketId).emit('Error', 'Please enter an assessment.');
         return;
     }
-    // Send to LUIS
-    let queryParams = {
-        "subscription-key": APPKEY,
-        "verbose": true,    // We need verbose so that we can access the entity data in a generic way
-        "show-all-intents": false,
-        "log": true,        // Also log query to LUIS console
-        "query": assessment
+
+    // Header Ocp-Apim-Subscription-Key is required for the endpoint   
+    let headers = {
+        "Ocp-Apim-Subscription-Key": APPKEY,
+        "Content-Type": "application/json"
     }
 
-    let luisRequest =
-        ENDPOINT +
-        '?' + querystring.stringify(queryParams);
+    let requestBody = {
+        "kind": "Conversation",
+        "analysisInput": {
+            "conversationItem": {
+                "id": "1",
+                "participantId": "1",
+                "text": assessment
+            }
+        },
+        "parameters": {
+            "projectName": PROJECT_NAME,
+            "deploymentName": DEPLOYMENT_NAME,
+            "stringIndexType": "TextElement_V8"
+        }
+    };
 
     try {
-        const response = await fetch(luisRequest);
+        const response = await fetch(ENDPOINT, { "method": "POST", "headers": headers, "body": JSON.stringify(requestBody) });
         if (!response.ok) {
             console.log('Error with request: ' + response.statusText);
             io.to(socketId).emit('Error', 'Sorry, I had problems with the request. ' + response.statusText);
@@ -61,30 +77,25 @@ async function sendToLuis(assessment, socketId) {
         const data = await response.json();
         console.log("Received data: " + JSON.stringify(data));
 
-        // // Check if the relevant properties exist
-        if (!data.prediction.entities.$instance ||
-            !Object.keys(data.prediction.entities.$instance) ||
-            !Object.keys(data.prediction.entities.$instance)[0] ||
-            !data.prediction.entities.$instance[Object.keys(data.prediction.entities.$instance)[0]][0].text) {
+        // Check if the relevant properties exist
+        if (!data.result.prediction.topIntent ||
+            !data.result.prediction.entities ||
+            data.result.prediction.entities.length == 0 ||
+            !data.result.prediction.entities[0].text) {
             console.log('Missing query, intent or entity: ');
             console.log(data);
             io.to(socketId).emit('Error', 'Sorry, I could not understand that. [No intent or entity identified]');
             return;
         }
 
-        const instance = data.prediction.entities.$instance;
-        //console.log("Entity $instance: " + JSON.stringify(instance));
-        //console.log("Name of first element in $instance (not an array!): " + Object.keys(instance)[0]);
-        const firstInstance = Object.keys(instance)[0];
-        //console.log("Accessing first element in $instance: " + JSON.stringify(instance[firstInstance]));
-        //console.log("Text in first element in $instance: " + instance[firstInstance][0].text);
-        const firstInstanceText = instance[firstInstance][0].text;
+        const topIntent = data.result.prediction.topIntent;
+        const topEntity = data.result.prediction.entities[0].text;
 
-        console.log(`Query: ${data.query}`);
-        console.log(`Top Intent: ${data.prediction.topIntent}`);
-        console.log(`Entity text: ${firstInstanceText}`);
+        console.log(`Query: ${data.result.query}`);
+        console.log(`Top Intent: ${topIntent}`);
+        console.log(`Entity text: ${topEntity}`);
 
-        io.to(socketId).emit(data.prediction.topIntent, firstInstanceText);
+        io.to(socketId).emit(topIntent, topEntity);
     } catch (error) {
         console.log(error);
         io.to(socketId).emit('Error', 'Error understanding your assessment: ' + error);
@@ -93,4 +104,4 @@ async function sendToLuis(assessment, socketId) {
 }
 
 
-http.listen(PORT, () => console.log(`Vital Signs Checklist server listening on port ${PORT}!`));
+httpServer.listen(PORT, () => console.log(`Vital Signs Checklist server listening on port ${PORT}!`));

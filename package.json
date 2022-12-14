@@ -1,8 +1,9 @@
 {
   "name": "vitalsigns-checklist",
-  "version": "2.0.0",
-  "description": "Automatically log a vital signs checklist for nurses in hospitals. Uses natural language understanding from Microsoft LUIS / Language Understanding Intelligent Service. Based on a Node.JS app.",
+  "version": "3.0.0",
+  "description": "Automatically log a vital signs checklist for nurses in hospitals. Uses Microsoft Conversational Language Understanding. Based on a Node.JS app.",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
