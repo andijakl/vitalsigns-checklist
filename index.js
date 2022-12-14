@@ -12,10 +12,10 @@ const io = new Server(httpServer, {
 import fetch from 'node-fetch';
 
 // TODO: configure these values according to your deployment!
-const ENDPOINT_ID = "fhstp-language";
-const PROJECT_NAME = "PatientCheck";
-const APPKEY = "f759dd0473994ea1b3d9b7fddb07d707";
-const DEPLOYMENT_NAME = "vitalsigns-deployment";
+const ENDPOINT_ID = "";
+const PROJECT_NAME = "";
+const APPKEY = "";
+const DEPLOYMENT_NAME = "";
 
 // YOu do not need to change the following settings
 const ENDPOINT = `https://${ENDPOINT_ID}.cognitiveservices.azure.com/language/:analyze-conversations?api-version=2022-10-01-preview`;
