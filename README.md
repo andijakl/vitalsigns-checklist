@@ -1,8 +1,8 @@
 # Vital Signs Checklist
 
-Automatically log a vital signs checklist for nurses in hospitals. Uses natural language understanding from Microsoft LUIS / Language Understanding Intelligent Service. Based on a Node.JS app.
+Automatically log a vital signs checklist for nurses in hospitals. Uses the Conversational Language Understanding service from Microsoft Azure Cognitive Services. Based on a Node.JS app.
 
-To run the app, open index.js and set the ENDPOINT, APPID and APPKEY for your LUIS service running on Microsoft Azure.
+To run the app, open index.js and set the parameters (like APPID) for your service running on Microsoft Azure.
 
 For instructions, see the article series:
 
@@ -15,7 +15,8 @@ For instructions, see the article series:
 
 Released under the MIT license - see the LICENSE file for details.
 
-Developed by Andreas Jakl
+Developed by Andreas Jakl, St. Pölten University of Applied Sciences
 
+- [https://www.fhstp.ac.at/en/academic-studies-continuing-education/media-digital-technologies/digital-healthcare?set_language=en](Digital Healthcare Degree Program, St. Pölten University of Applied Sciences, Austria)
 - <https://www.andreasjakl.com/>
 - <https://twitter.com/andijakl>
