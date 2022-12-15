@@ -1,13 +1,14 @@
 import express from 'express';
-const app = express();
 import { createServer } from "http";
 import { Server } from "socket.io";
 
+// For creating the Node JS server in the ES modules syntax
+// based on Express, see: 
+// https://socket.io/docs/v4/server-initialization/#with-express
+const app = express();
 const httpServer = createServer(app);
 
-const io = new Server(httpServer, {
-    perMessageDeflate: false
-});
+const io = new Server(httpServer);
 
 import fetch from 'node-fetch';
 
