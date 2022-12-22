@@ -1,16 +1,14 @@
 import express from 'express';
 import { createServer } from "http";
 import { Server } from "socket.io";
+import fetch from 'node-fetch';
 
 // For creating the Node JS server in the ES modules syntax
 // based on Express, see: 
 // https://socket.io/docs/v4/server-initialization/#with-express
 const app = express();
 const httpServer = createServer(app);
-
 const io = new Server(httpServer);
-
-import fetch from 'node-fetch';
 
 // TODO: configure these values according to your deployment!
 const ENDPOINT_ID = "";
@@ -18,7 +16,7 @@ const PROJECT_NAME = "";
 const APPKEY = "";
 const DEPLOYMENT_NAME = "";
 
-// YOu do not need to change the following settings
+// You do not need to change the following settings
 const ENDPOINT = `https://${ENDPOINT_ID}.cognitiveservices.azure.com/language/:analyze-conversations?api-version=2022-10-01-preview`;
 const PORT = process.env.PORT || 3000;
 
