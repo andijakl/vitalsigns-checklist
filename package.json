@@ -20,6 +20,6 @@
   "dependencies": {
     "express": "^4.19.2",
     "node-fetch": "^3.2.10",
-    "socket.io": "^4.6.1"
+    "socket.io": "^4.6.2"
   }
 }
