@@ -19,7 +19,7 @@
   "homepage": "https://github.com/andijakl/vitalsigns-checklist#readme",
   "dependencies": {
     "express": "^4.19.2",
-    "node-fetch": "^3.2.10",
-    "socket.io": "^4.6.2"
+    "node-fetch": "^3.3.2",
+    "socket.io": "^4.7.5"
   }
 }
